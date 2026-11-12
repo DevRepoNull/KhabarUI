@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "description": "Rasad Persian News Agency & CMS Template - Local Tailwind CSS Build System",
+  "license": "MIT",
   "scripts": {
     "watch": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --watch",
     "dev": "tailwindcss -i ./src/input.css -o ./assets/css/style.css --watch",
