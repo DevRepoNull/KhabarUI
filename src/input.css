@@ -1,0 +1,941 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==========================================================================
+   Local Web Font: Vazirmatn
+   Place the downloaded .woff2 files inside ./assets/fonts/Vazirmatn/
+   (Paths below resolve relative to the compiled ./assets/css/style.css)
+   ========================================================================== */
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-Medium.woff2') format('woff2');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-ExtraBold.woff2') format('woff2');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('../fonts/Vazirmatn/Vazirmatn-Black.woff2') format('woff2');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ==========================================================================
+   Persian News Agency - Global Stylesheet Source
+   Compiled via Tailwind CSS CLI from ./src/input.css -> ./assets/css/style.css
+   ========================================================================== */
+
+@layer base {
+    :root {
+        --color-brand-primary: #8B0000;
+        --color-brand-primary-hover: #6e0404;
+        --color-brand-primary-light: #fff1f1;
+        --font-persian-sans: 'Vazirmatn', Tahoma, Arial, sans-serif;
+    }
+
+    html {
+        color-scheme: light;
+        scroll-behavior: smooth;
+        font-family: var(--font-persian-sans);
+        overflow-x: clip;
+    }
+
+    /* Prevent outer document scrollbars or blank scroll-into-view shifts in fixed-viewport admin shells */
+    html:has(> body.h-screen.overflow-hidden) {
+        height: 100%;
+        height: 100dvh;
+        overflow: hidden;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+
+    body {
+        font-family: var(--font-persian-sans);
+        text-rendering: optimizeLegibility;
+        overflow-x: clip;
+    }
+
+    body.modal-open {
+        overflow: hidden;
+    }
+
+    /* Native checkboxes & radios aligned with Dark Crimson brand accent */
+    input[type='checkbox'],
+    input[type='radio'] {
+        accent-color: var(--color-brand-primary);
+    }
+
+    html.dark input[type='checkbox'],
+    html.dark input[type='radio'] {
+        accent-color: #dc1e1e;
+    }
+
+    select {
+        text-align: start;
+    }
+
+    /* Accessible keyboard focus indicator aligned with brand color */
+    :focus-visible {
+        outline: 0.125rem solid var(--color-brand-primary);
+        outline-offset: 0.125rem;
+    }
+
+    html.dark :focus-visible {
+        outline-color: #f87171;
+    }
+}
+
+/* ==========================================================================
+   Dark / Light Mode Switch
+   ========================================================================== */
+
+.theme-switch-track {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 3.5rem;
+    height: 1.875rem;
+    padding: 0 0.375rem;
+    border-radius: 9999px;
+    background-color: #e2e8f0;
+    transition: background-color 0.2s ease;
+}
+
+html.dark .theme-switch-track {
+    background-color: #334155;
+}
+
+.theme-switch-thumb {
+    position: absolute;
+    top: 0.1875rem;
+    left: 0.1875rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    background-color: #ffffff;
+    box-shadow: 0 0.0625rem 0.1875rem rgba(15, 23, 42, 0.25);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s ease;
+}
+
+html.dark .theme-switch-thumb {
+    transform: translateX(1.625rem);
+    background-color: #0f172a;
+}
+
+/* ==========================================================================
+   Mega Menu Dropdown Panel
+   ========================================================================== */
+
+.mega-menu-panel {
+    z-index: 60;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-0.375rem);
+    transition: opacity 0.18s ease, transform 0.18s ease, visibility 0.18s ease;
+}
+
+.mega-menu-panel.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* ==========================================================================
+   Breaking News Ticker (RTL Seamless Marquee)
+   ========================================================================== */
+
+.ticker-viewport {
+    position: relative;
+    mask-image: linear-gradient(to left, transparent 0%, #000 2%, #000 98%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to left, transparent 0%, #000 2%, #000 98%, transparent 100%);
+}
+
+.ticker-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: ticker-scroll-rtl 38s linear infinite;
+    will-change: transform;
+}
+
+.ticker-viewport:hover .ticker-track,
+.ticker-viewport:focus-within .ticker-track {
+    animation-play-state: paused;
+}
+
+.ticker-group {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    padding-inline: 1rem;
+    transition: opacity 0.15s ease;
+}
+
+.ticker-item:hover {
+    opacity: 0.85;
+}
+
+.ticker-item::after {
+    content: '◆';
+    font-size: 0.5625rem;
+    opacity: 0.65;
+    margin-inline-start: 1.5rem;
+}
+
+@keyframes ticker-scroll-rtl {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+        animation: none;
+    }
+
+    .mega-menu-panel,
+    .theme-switch-thumb {
+        transition: none;
+    }
+}
+
+/* ==========================================================================
+   Sidebar Poll Progress Bar
+   ========================================================================== */
+
+.poll-progress {
+    width: 100%;
+    height: 0.45rem;
+    border: none;
+    border-radius: 9999px;
+    overflow: hidden;
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: #e2e8f0;
+}
+
+html.dark .poll-progress {
+    background-color: #334155;
+}
+
+.poll-progress::-webkit-progress-bar {
+    background-color: #e2e8f0;
+    border-radius: 9999px;
+}
+
+html.dark .poll-progress::-webkit-progress-bar {
+    background-color: #334155;
+}
+
+.poll-progress::-webkit-progress-value {
+    background-color: var(--color-brand-primary);
+    border-radius: 9999px;
+    transition: width 0.35s ease;
+}
+
+html.dark .poll-progress::-webkit-progress-value {
+    background-color: #ef4444;
+}
+
+.poll-progress::-moz-progress-bar {
+    background-color: var(--color-brand-primary);
+    border-radius: 9999px;
+}
+
+html.dark .poll-progress::-moz-progress-bar {
+    background-color: #ef4444;
+}
+
+/* ==========================================================================
+   Article Reading Progress Bar & Toast Notification (single.html)
+   ========================================================================== */
+
+#reading-progress-bar {
+    width: var(--scroll-progress, 0%);
+    will-change: width;
+}
+
+.toast-banner {
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.toast-banner.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast-banner {
+        transition: none;
+    }
+}
+
+/* ==========================================================================
+   Skeleton Loaders (Phase 9)
+   ========================================================================== */
+
+.skeleton-block {
+    position: relative;
+    overflow: hidden;
+    background-color: #e5e7eb; /* gray-200 */
+    border-radius: 0.5rem;
+    animation: skeleton-pulse 1.6s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+html.dark .skeleton-block {
+    background-color: #374151; /* gray-700 */
+}
+
+.skeleton-block::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    transform: translateX(100%);
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.45) 50%,
+        transparent 100%
+    );
+    animation: skeleton-shimmer 1.8s infinite;
+}
+
+html.dark .skeleton-block::after {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        transparent 100%
+    );
+}
+
+.skeleton-media {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 0;
+}
+
+.skeleton-badge {
+    width: 4.5rem;
+    height: 1.5rem;
+    border-radius: 0.375rem;
+}
+
+.skeleton-title {
+    height: 1.125rem;
+    border-radius: 0.5rem;
+}
+
+.skeleton-line {
+    height: 0.75rem;
+    border-radius: 0.375rem;
+}
+
+@keyframes skeleton-pulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.62;
+    }
+}
+
+@keyframes skeleton-shimmer {
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-block,
+    .skeleton-block::after {
+        animation: none;
+    }
+}
+
+/* ==========================================================================
+   Global Dynamic Toast Notification System (Phase 9)
+   ========================================================================== */
+
+.toast-stack {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 1.25rem;
+    z-index: 90;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.625rem;
+    max-width: min(24rem, calc(100vw - 2rem));
+    pointer-events: none;
+}
+
+.toast-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    border-radius: 0.875rem;
+    border: 0.0625rem solid #334155;
+    border-inline-start-width: 0.25rem;
+    background-color: #0f172a;
+    color: #f8fafc;
+    box-shadow: 0 1.125rem 2.25rem -0.75rem rgba(15, 23, 42, 0.45);
+    pointer-events: auto;
+    opacity: 0;
+    transform: translateX(-115%);
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+    will-change: transform, opacity;
+}
+
+.toast-item.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast-item--success {
+    border-inline-start-color: #10b981;
+}
+
+.toast-item--success .toast-item__icon {
+    background-color: rgba(16, 185, 129, 0.18);
+    color: #34d399;
+}
+
+.toast-item--error {
+    border-inline-start-color: #ef4444;
+}
+
+.toast-item--error .toast-item__icon {
+    background-color: rgba(239, 68, 68, 0.18);
+    color: #f87171;
+}
+
+.toast-item--info {
+    border-inline-start-color: #3b82f6;
+}
+
+.toast-item--info .toast-item__icon {
+    background-color: rgba(59, 130, 246, 0.18);
+    color: #60a5fa;
+}
+
+.toast-item__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 9999px;
+    flex-shrink: 0;
+}
+
+.toast-item__message {
+    flex: 1;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    line-height: 1.45;
+}
+
+.toast-item__close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 0.375rem;
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.toast-item__close:hover {
+    color: #ffffff;
+    background-color: rgba(148, 163, 184, 0.16);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .toast-item {
+        transition: none;
+    }
+}
+
+/* ==========================================================================
+   CMS Admin Utilities (Phase 10)
+   ========================================================================== */
+
+.cms-editor-surface:focus {
+    outline: none;
+}
+
+.cms-editor-surface[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   Jalali Date & Time Picker Theme Overrides (Phase 21 - Strictly rem-based)
+   ========================================================================== */
+
+jdp-overlay {
+    backdrop-filter: blur(0.125rem);
+    -webkit-backdrop-filter: blur(0.125rem);
+}
+
+jdp-container {
+    --jdp-day-size: 2.6875rem;
+    --jdp-color-0: #ffffff;
+    --jdp-color-1: #f8fafc;
+    --jdp-color-2: #f1f5f9;
+    --jdp-color-3: #cbd5e1;
+    --jdp-color-4: #64748b;
+    --jdp-color-5: #0f172a;
+    --jdp-primary: #8B0000;
+    --jdp-red: #dc2626;
+    font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+    border-radius: 1rem;
+    padding: 0.75rem 0;
+    border: 0.0625rem solid #e2e8f0;
+    box-shadow: 0 1.25rem 2.5rem -0.625rem rgba(15, 23, 42, 0.16), 0 0.5rem 1rem -0.375rem rgba(15, 23, 42, 0.08);
+}
+
+html.dark jdp-container {
+    --jdp-color-0: #1e293b;
+    --jdp-color-1: #0f172a;
+    --jdp-color-2: #334155;
+    --jdp-color-3: #475569;
+    --jdp-color-4: #94a3b8;
+    --jdp-color-5: #f8fafc;
+    --jdp-primary: #dc1e1e;
+    --jdp-red: #f87171;
+    color-scheme: dark;
+    border-color: #334155;
+    box-shadow: 0 1.25rem 2.5rem -0.625rem rgba(0, 0, 0, 0.55), 0 0.5rem 1rem -0.375rem rgba(0, 0, 0, 0.35);
+}
+
+@media only screen and (max-width: 30.0625rem) {
+    jdp-container {
+        min-width: 17.5rem;
+        border-radius: 1.25rem 1.25rem 0 0;
+    }
+}
+
+jdp-container .jdp-icon-plus,
+jdp-container .jdp-icon-minus {
+    border: 0.0625rem solid var(--jdp-color-2);
+    background-color: var(--jdp-color-1);
+    border-radius: 0.5rem;
+    color: var(--jdp-color-5);
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+jdp-container .jdp-icon-plus:not(.not-in-range):hover,
+jdp-container .jdp-icon-minus:not(.not-in-range):hover {
+    background-color: var(--jdp-color-2);
+    border-color: var(--jdp-primary);
+    color: var(--jdp-primary);
+}
+
+jdp-container .jdp-years,
+jdp-container .jdp-months {
+    font-size: 0.875rem;
+    font-weight: 700;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+jdp-container .jdp-year select,
+jdp-container .jdp-month select {
+    background-color: var(--jdp-color-1);
+    border: 0.0625rem solid var(--jdp-color-2);
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.375rem;
+    font-weight: 700;
+    font-size: 0.8125rem;
+}
+
+jdp-container .jdp-days-header {
+    padding: 0.125rem 0.5rem;
+    margin-top: 0.625rem;
+}
+
+jdp-container .jdp-days {
+    padding: 0.25rem 0.5rem;
+}
+
+jdp-container .jdp-day,
+jdp-container .jdp-day-name {
+    border: 0.0625rem solid transparent;
+    height: calc(var(--jdp-day-size) - 0.6875rem);
+    line-height: calc(var(--jdp-day-size) - 0.6875rem);
+    margin: 0.125rem 0;
+    font-size: 0.8125rem;
+    font-weight: 600;
+}
+
+jdp-container .jdp-day-name {
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+jdp-container .jdp-day:not(.disabled-day) {
+    border-radius: 0.5rem;
+}
+
+jdp-container .jdp-day:not(.disabled-day):hover {
+    transform: none;
+}
+
+jdp-container .jdp-day.today {
+    border-color: var(--jdp-primary);
+    font-weight: 800;
+}
+
+jdp-container .jdp-day.selected,
+jdp-container .jdp-day-name.selected {
+    background-color: var(--jdp-primary) !important;
+    color: #ffffff !important;
+    border-color: var(--jdp-primary);
+    font-weight: 800;
+}
+
+jdp-container .jdp-day.range-start,
+jdp-container .jdp-day-name.range-start {
+    border-radius: 0.25rem 0 0 0.25rem;
+}
+
+jdp-container .jdp-day.range-end,
+jdp-container .jdp-day-name.range-end {
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+jdp-container .jdp-time-container {
+    padding: 0.625rem 0.75rem 0.125rem;
+    margin-top: 0.375rem;
+    border-top: 0.0625rem solid var(--jdp-color-2);
+    align-items: center;
+}
+
+jdp-container .jdp-time-container .jdp-time {
+    margin: 0 0.375rem;
+}
+
+jdp-container .jdp-time-container .jdp-time select {
+    padding: 0.4375rem 0.75rem;
+    background: var(--jdp-color-1);
+    border: 0.0625rem solid var(--jdp-color-2);
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--jdp-color-5);
+    direction: ltr;
+}
+
+jdp-container .jdp-time-container .jdp-time select:focus {
+    border-color: var(--jdp-primary);
+}
+
+jdp-container .jdp-time-container.jdp-only-time .jdp-time select {
+    padding: 0.625rem 0.875rem;
+    font-size: 1.25rem;
+}
+
+jdp-container .jdp-footer {
+    padding: 0.625rem 0.75rem 0.125rem;
+    gap: 0.5rem;
+}
+
+jdp-container .jdp-btn-today,
+jdp-container .jdp-btn-empty,
+jdp-container .jdp-btn-close {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+}
+
+jdp-container .jdp-btn-today {
+    background: var(--jdp-primary);
+    color: #ffffff;
+}
+
+jdp-container .jdp-btn-today:not(.disabled-btn):hover {
+    opacity: 0.92;
+}
+
+jdp-container .jdp-btn-empty {
+    background: var(--jdp-color-2);
+    color: var(--jdp-color-5);
+}
+
+jdp-container .jdp-btn-close {
+    background: transparent;
+    border: 0.0625rem solid var(--jdp-color-3);
+    color: var(--jdp-color-5);
+}
+
+/* ==========================================================================
+   Editorial Page Preloader & Top Progress Bar (Phase 22 - Strictly rem-based)
+   ========================================================================== */
+
+.rasad-page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 120;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    background: radial-gradient(circle at 50% 40%, rgba(255, 241, 241, 0.98) 0%, rgba(248, 250, 252, 0.98) 65%);
+    backdrop-filter: blur(0.625rem);
+    -webkit-backdrop-filter: blur(0.625rem);
+    transition: opacity 0.34s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.34s ease, transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: rasad-loader-failsafe 0.3s ease 1.8s forwards;
+}
+
+@media (prefers-color-scheme: dark) {
+    html:not(.light) .rasad-page-loader {
+        background: radial-gradient(circle at 50% 40%, rgba(30, 41, 59, 0.96) 0%, rgba(2, 6, 23, 0.98) 70%);
+    }
+}
+
+html.dark .rasad-page-loader {
+    background: radial-gradient(circle at 50% 40%, rgba(30, 41, 59, 0.96) 0%, rgba(2, 6, 23, 0.98) 70%);
+}
+
+.rasad-page-loader.is-force-visible {
+    animation: none;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: scale(1);
+}
+
+.rasad-page-loader.is-hidden {
+    animation: none;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: scale(1.018);
+}
+
+.rasad-loader-emblem {
+    position: relative;
+    width: 4.75rem;
+    height: 4.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.rasad-loader-ring-outer {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    border: 0.1875rem solid rgba(139, 0, 0, 0.14);
+    border-top-color: #8B0000;
+    border-right-color: #dc1e1e;
+    animation: rasad-spin 0.95s cubic-bezier(0.55, 0.18, 0.45, 0.85) infinite;
+}
+
+html.dark .rasad-loader-ring-outer {
+    border-color: rgba(248, 113, 113, 0.16);
+    border-top-color: #ef4444;
+    border-right-color: #f87171;
+}
+
+.rasad-loader-ring-inner {
+    position: absolute;
+    inset: 0.5rem;
+    border-radius: 9999px;
+    border: 0.125rem solid transparent;
+    border-bottom-color: rgba(245, 158, 11, 0.85);
+    border-left-color: rgba(245, 158, 11, 0.4);
+    animation: rasad-spin-reverse 1.35s linear infinite;
+}
+
+.rasad-loader-core {
+    position: relative;
+    width: 2.375rem;
+    height: 2.375rem;
+    border-radius: 0.75rem;
+    background: linear-gradient(135deg, #8B0000 0%, #dc1e1e 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.0625rem;
+    font-weight: 900;
+    box-shadow: 0 0.625rem 1.5rem -0.25rem rgba(139, 0, 0, 0.45);
+    animation: rasad-pulse-core 1.8s ease-in-out infinite;
+}
+
+.rasad-loader-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+    text-align: center;
+}
+
+.rasad-loader-brand {
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.015em;
+}
+
+html.dark .rasad-loader-brand {
+    color: #f8fafc;
+}
+
+.rasad-loader-status {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #64748b;
+}
+
+html.dark .rasad-loader-status {
+    color: #94a3b8;
+}
+
+.rasad-loader-track {
+    width: 9.5rem;
+    height: 0.25rem;
+    border-radius: 9999px;
+    background-color: rgba(148, 163, 184, 0.22);
+    overflow: hidden;
+    position: relative;
+}
+
+.rasad-loader-fill {
+    position: absolute;
+    inset-block: 0;
+    right: -45%;
+    width: 45%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #dc1e1e 0%, #f59e0b 50%, #8B0000 100%);
+    animation: rasad-progress-sweep 1.15s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes rasad-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes rasad-spin-reverse {
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+@keyframes rasad-pulse-core {
+    0%,
+    100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.06);
+    }
+}
+
+@keyframes rasad-progress-sweep {
+    0% {
+        right: -45%;
+    }
+    100% {
+        right: 105%;
+    }
+}
+
+@keyframes rasad-loader-failsafe {
+    to {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .rasad-loader-ring-outer,
+    .rasad-loader-ring-inner,
+    .rasad-loader-core,
+    .rasad-loader-fill {
+        animation: none;
+    }
+    .rasad-page-loader {
+        transition: opacity 0.12s ease, visibility 0.12s ease;
+    }
+}

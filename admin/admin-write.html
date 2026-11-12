@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="نگارش و ویرایش خبر جدید با ابزارک‌های سئو، پیوند یکتا و دسته‌بندی در پنل خبرگزاری رصد" />
+    <title>نگارش خبر جدید | پنل ادمین خبرگزاری رصد</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/favicon.png" />
+
+    <!-- Jalali Datepicker Local CSS & Compiled Tailwind Styles -->
+    <link rel="stylesheet" href="../assets/css/jalali-datepicker.min.css" />
+    <script>(function(){try{var t=localStorage.getItem('news-agency-theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.classList.toggle('light',!d);}catch(e){}})();</script>
+    <link rel="stylesheet" href="../assets/css/style.css" />
+</head>
+<body class="relative flex h-screen w-full bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased overflow-hidden transition-colors duration-200">
+    <!-- Page Preloader -->
+    <div id="rasad-page-loader" class="rasad-page-loader" role="status" aria-live="polite" aria-label="در حال بارگذاری صفحه">
+        <div class="rasad-loader-emblem" aria-hidden="true">
+            <span class="rasad-loader-ring-outer"></span>
+            <span class="rasad-loader-ring-inner"></span>
+            <span class="rasad-loader-core">ر</span>
+        </div>
+        <div class="rasad-loader-meta">
+            <span class="rasad-loader-brand">خبرگزاری رصد</span>
+            <span class="rasad-loader-status">در حال آماده‌سازی پنل تحریریه...</span>
+        </div>
+        <div class="rasad-loader-track" aria-hidden="true"><span class="rasad-loader-fill"></span></div>
+    </div>
+
+    <!-- Mobile Drawer Backdrop -->
+    <div id="rtl-admin-sidebar-backdrop" aria-hidden="true" class="hidden fixed inset-0 z-[65] bg-slate-950/60 backdrop-blur-sm lg:hidden"></div>
+
+    <!-- ==================== 1. Fixed Right Dark Sidebar (RTL) ==================== -->
+    <aside
+        id="rtl-admin-sidebar"
+        aria-label="منوی مدیریت پنل خبری"
+        class="fixed inset-y-0 right-0 z-[70] lg:z-40 w-64 h-full min-h-0 overflow-hidden shrink-0 bg-slate-950 text-slate-200 border-l border-slate-800 flex flex-col transform translate-x-full lg:translate-x-0 lg:static lg:inset-auto transition-transform duration-200 ease-out"
+    >
+        <!-- Brand Header -->
+        <div class="h-16 px-5 flex items-center justify-between border-b border-slate-800 shrink-0">
+            <a href="admin-dashboard.html" class="flex items-center gap-3 focus-visible:outline-none">
+                <span class="w-9 h-9 rounded-xl bg-primary text-white font-extrabold text-sm flex items-center justify-center shadow-lg shadow-primary/30">
+                    رصد
+                </span>
+                <div>
+                    <span class="block text-sm font-extrabold text-white tracking-tight">پنل مدیریت رصد</span>
+                    <span class="block text-[0.625rem] text-slate-400">مدیریت مرکزی تحریریه</span>
+                </div>
+            </a>
+            <button
+                type="button"
+                id="rtl-admin-sidebar-close"
+                aria-label="بستن منوی کناری"
+                class="lg:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Primary Navigation Links -->
+        <nav aria-label="ناوبری بخش‌های پنل ادمین" class="flex-1 min-h-0 overflow-y-auto px-3 py-5 space-y-1.5 text-sm">
+            <p class="px-3 pb-1 text-[0.6875rem] font-bold uppercase tracking-wider text-slate-500">ناوبری اصلی</p>
+
+            <a
+                href="admin-dashboard.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                <span>داشبورد</span>
+            </a>
+
+            <a
+                href="admin-posts.html"
+                class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+                <span class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                    <span>مطالب و اخبار</span>
+                </span>
+                <span class="px-2 py-0.5 rounded-full text-[0.625rem] font-bold bg-slate-800 text-slate-300">۱۲٬۴۸۰</span>
+            </a>
+
+            <a
+                href="admin-write.html"
+                aria-current="page"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-primary text-white font-bold shadow-md shadow-primary/25 transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                <span>نگارش خبر جدید</span>
+            </a>
+
+            <a
+                href="admin-categories.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                </svg>
+                <span>دسته‌بندی‌ها</span>
+            </a>
+
+            <a
+                href="admin-comments.html"
+                class="flex items-center justify-between px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+                <span class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                    </svg>
+                    <span>دیدگاه‌ها</span>
+                </span>
+                <span class="px-2 py-0.5 rounded-full text-[0.625rem] font-bold bg-amber-500/20 text-amber-300">۲۷</span>
+            </a>
+
+            <a
+                href="admin-users.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+                <span>کاربران</span>
+            </a>
+
+            <a
+                href="admin-settings.html"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>تنظیمات</span>
+            </a>
+
+            <div class="pt-3 mt-3 border-t border-slate-800/80">
+                <a
+                    href="../frontend/loading-demo.html"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 text-amber-400" aria-hidden="true">
+                        <path d="M12 2v4" />
+                        <path d="m16.2 7.8 2.9-2.9" />
+                        <path d="M18 12h4" />
+                        <path d="m16.2 16.2 2.9 2.9" />
+                        <path d="M12 18v4" />
+                        <path d="m4.9 19.1 2.9-2.9" />
+                        <path d="M2 12h4" />
+                        <path d="m4.9 4.9 2.9 2.9" />
+                    </svg>
+                    <span>دموی لودر و اعلان‌ها</span>
+                </a>
+                <a
+                    href="admin-permission.html"
+                    class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0 text-purple-400" aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                        <path d="M12 8v4m0 4h.01" />
+                    </svg>
+                    <span>خطای مجوز دسترسی</span>
+                </a>
+            </div>
+        </nav>
+
+        <!-- Sidebar Bottom Info -->
+        <div class="p-4 border-t border-slate-800 space-y-3 shrink-0">
+            <div class="flex items-center gap-3 pb-1">
+                <img src="../assets/images/avatar.jpg" alt="تصویر مهراد کاظمی - سردبیر کل" class="w-9 h-9 rounded-full object-cover object-top ring-2 ring-slate-700 bg-slate-800 shrink-0" />
+                <div class="min-w-0">
+                    <p class="text-xs font-bold text-white truncate">مهراد کاظمی</p>
+                    <p class="text-[0.6875rem] text-slate-400 truncate">سردبیر کل تحریریه</p>
+                </div>
+            </div>
+            <a
+                href="../frontend/index.html"
+                class="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white transition-colors"
+            >
+                <span>مشاهده صفحه اصلی خبر</span>
+                <span aria-hidden="true">←</span>
+            </a>
+
+            <div class="text-center text-sm text-gray-500 py-4 mt-8 border-t border-gray-200 dark:border-gray-800">
+                توسعه داده شده توسط <a href="https://github.com/DevRepoNull" target="_blank" rel="noopener noreferrer" class="font-bold text-brand-red hover:underline transition-all">DevRepoNull</a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ==================== 2. Scrollable Workspace Column ==================== -->
+    <div class="flex-1 flex flex-col min-w-0 min-h-0 h-full overflow-hidden">
+        <!-- Topbar: White Bar with Search, Notifications Bell & Admin Profile Dropdown -->
+        <header class="relative z-[60] h-16 bg-white dark:bg-slate-800 border-b border-gray-200 dark:border-slate-700 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4 shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button
+                    type="button"
+                    id="rtl-admin-sidebar-toggle"
+                    aria-controls="rtl-admin-sidebar"
+                    aria-expanded="false"
+                    aria-label="باز کردن منوی مدیریت"
+                    class="lg:hidden inline-flex items-center justify-center p-2 rounded-lg border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
+                <!-- Topbar Global Search -->
+                <form id="admin-topbar-search-form" class="relative hidden sm:block w-64 md:w-80">
+                    <label for="admin-topbar-search-input" class="sr-only">جستجو در پنل مدیریت</label>
+                    <input
+                        type="search"
+                        id="admin-topbar-search-input"
+                        placeholder="جستجوی سراسری در تحریریه..."
+                        class="w-full pr-9 pl-3 py-2 text-xs rounded-xl bg-gray-100 dark:bg-slate-900 border border-gray-200 dark:border-slate-700 text-gray-800 dark:text-gray-100 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary transition-colors"
+                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </form>
+            </div>
+
+            <div class="flex items-center gap-2.5 sm:gap-3">
+                <div class="hidden md:inline-flex items-center gap-1.5 text-xs text-gray-500 dark:text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <time id="persian-date" datetime=""></time>
+                </div>
+
+                <!-- Theme Toggle -->
+                <button
+                    type="button"
+                    id="theme-toggle-btn"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="تغییر حالت تاریک و روشن"
+                    class="inline-flex items-center rounded-full p-0.5 focus-visible:outline-none"
+                >
+                    <span class="theme-switch-track">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-indigo-400 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-500 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                        </svg>
+                        <span class="theme-switch-thumb" aria-hidden="true"></span>
+                    </span>
+                </button>
+
+                <!-- Notifications Bell & Dropdown -->
+                <div class="relative z-[60]">
+                    <button
+                        type="button"
+                        id="admin-notif-btn"
+                        aria-controls="admin-notif-menu"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        aria-label="اعلان‌های سیستم"
+                        class="relative p-2 rounded-xl border border-gray-200 dark:border-slate-700 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                        </svg>
+                        <span id="admin-notif-badge" class="absolute top-1.5 left-1.5 w-2 h-2 rounded-full bg-primary ring-2 ring-white dark:ring-slate-800"></span>
+                    </button>
+
+                    <div
+                        id="admin-notif-menu"
+                        role="menu"
+                        aria-labelledby="admin-notif-btn"
+                        aria-hidden="true"
+                        class="hidden absolute -left-12 sm:left-0 mt-2 w-64 sm:w-80 max-w-[calc(100vw-2rem)] rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-xl z-[60] overflow-hidden"
+                    >
+                        <div class="px-4 py-3 border-b border-gray-100 dark:border-slate-700 flex items-center justify-between">
+                            <span class="text-xs font-extrabold text-gray-900 dark:text-white">اعلان‌های تحریریه</span>
+                            <button type="button" id="admin-notif-mark-read" class="text-[0.6875rem] font-bold text-primary dark:text-red-400 hover:underline">
+                                خواندن همه
+                            </button>
+                        </div>
+                        <ul class="divide-y divide-gray-100 dark:divide-slate-700/80 text-xs">
+                            <li class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-slate-700/40 transition-colors">
+                                <p class="font-semibold text-gray-800 dark:text-gray-100">مطلب ارسالی خبرنگار حوزه اقتصاد منتظر انتشار است</p>
+                                <span class="text-[0.6875rem] text-gray-400">۶ دقیقه پیش</span>
+                            </li>
+                            <li class="px-4 py-3 hover:bg-gray-50 dark:hover:bg-slate-700/40 transition-colors">
+                                <p class="font-semibold text-gray-800 dark:text-gray-100">پیش‌نویس گزارش هوش مصنوعی ذخیره خودکار شد</p>
+                                <span class="text-[0.6875rem] text-gray-400">۱۹ دقیقه پیش</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Admin Profile Dropdown -->
+                <div class="relative z-[60]">
+                    <button
+                        type="button"
+                        id="admin-profile-btn"
+                        aria-controls="admin-profile-menu"
+                        aria-expanded="false"
+                        aria-haspopup="true"
+                        class="flex items-center gap-2.5 pl-2 pr-1.5 py-1 rounded-xl border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-700/60 transition-colors"
+                    >
+                        <img src="../assets/images/avatar.jpg" alt="نمایه سردبیر کل" class="w-8 h-8 rounded-full object-cover object-top ring-2 ring-gray-100 dark:ring-slate-700 bg-slate-200 dark:bg-slate-700 shrink-0" />
+                        <div class="hidden sm:block text-right leading-tight">
+                            <span class="block text-xs font-bold text-gray-900 dark:text-white">مهراد کاظمی</span>
+                            <span class="block text-[0.625rem] text-gray-500 dark:text-slate-400">مدیر کل</span>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+
+                    <div
+                        id="admin-profile-menu"
+                        role="menu"
+                        aria-labelledby="admin-profile-btn"
+                        aria-hidden="true"
+                        class="hidden absolute left-0 mt-2 w-48 max-w-[calc(100vw-2rem)] rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 shadow-xl py-1.5 z-[60] text-xs"
+                    >
+                        <a href="admin-dashboard.html" role="menuitem" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700/60 font-medium">
+                            نمای کلی داشبورد
+                        </a>
+                        <a href="admin-posts.html" role="menuitem" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700/60 font-medium">
+                            مدیریت نوشته‌ها
+                        </a>
+                        <a href="admin-categories.html" role="menuitem" class="block px-4 py-2 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-slate-700/60 font-medium">
+                            مدیریت دسته‌بندی‌ها
+                        </a>
+                        <hr class="my-1 border-t border-gray-100 dark:border-slate-700" />
+                        <a href="../frontend/index.html" role="menuitem" class="block px-4 py-2 text-primary dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 font-bold">
+                            خروج به صفحه اصلی
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Scrollable Main Content -->
+        <main id="main-content" class="flex-1 min-h-0 overflow-y-auto overflow-x-clip overscroll-y-contain p-4 sm:p-6 md:p-8 space-y-5 sm:space-y-6">
+            <!-- Header Row -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-extrabold text-gray-900 dark:text-white">نگارش و انتشار نوشته جدید</h1>
+                    <p class="text-sm text-gray-500 dark:text-slate-400 mt-1">
+                        تنظیم عنوان، پیوند یکتا، متن خبر و پارامترهای سئو پیش از انتشار در صفحه اول
+                    </p>
+                </div>
+
+                <a
+                    href="admin-posts.html"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs sm:text-sm font-bold text-gray-700 dark:text-slate-200 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors"
+                >
+                    <span>بازگشت به مطالب</span>
+                    <span aria-hidden="true">←</span>
+                </a>
+            </div>
+
+            <!-- 2-Column Article Editor Form (8-cols Main Content + 4-cols Sidebar Settings) -->
+            <form id="admin-write-form" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start" novalidate>
+                <!-- Main Content (8 Columns) -->
+                <div class="lg:col-span-8 space-y-6">
+                    <!-- Large Title & Permalink / Slug Card -->
+                    <section aria-label="عنوان و پیوند یکتای خبر" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 p-6 shadow-sm space-y-5">
+                        <div>
+                            <label for="article-title-input" class="block text-xs font-bold text-gray-700 dark:text-slate-300 mb-2">
+                                تیتر و عنوان خبر <span class="text-primary dark:text-red-400">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="article-title-input"
+                                name="title"
+                                placeholder="تیتر اصلی خبر یا گزارش تحلیلی را اینجا بنویسید..."
+                                required
+                                class="w-full px-4 py-3.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50/60 dark:bg-slate-900 text-gray-900 dark:text-white text-lg sm:text-xl font-extrabold placeholder:font-medium placeholder:text-gray-400 focus:border-primary focus:ring-2 focus:ring-primary/25 transition-colors"
+                            />
+                        </div>
+
+                        <!-- Permalink / Slug Editor -->
+                        <div class="pt-3 border-t border-gray-100 dark:border-slate-700/80 space-y-2">
+                            <div class="flex items-center justify-between gap-2">
+                                <label for="article-slug-input" class="text-xs font-bold text-gray-700 dark:text-slate-300">
+                                    پیوند یکتا (Permalink / Slug)
+                                </label>
+                                <button
+                                    type="button"
+                                    id="generate-slug-btn"
+                                    class="text-xs font-bold text-primary dark:text-red-400 hover:underline"
+                                >
+                                    تولید خودکار از تیتر
+                                </button>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row sm:items-center gap-2" dir="ltr">
+                                <div class="flex-1 flex items-center rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 overflow-hidden focus-within:ring-2 focus-within:ring-primary/25 focus-within:border-primary">
+                                    <span class="px-3 py-2.5 text-xs font-mono text-gray-500 dark:text-slate-400 bg-gray-100 dark:bg-slate-800 border-r border-gray-200 dark:border-slate-700 shrink-0 select-none">
+                                        rasadnews.ir/news/
+                                    </span>
+                                    <input
+                                        type="text"
+                                        id="article-slug-input"
+                                        name="slug"
+                                        dir="ltr"
+                                        value="ai-national-infrastructure-report"
+                                        placeholder="custom-news-slug"
+                                        class="w-full border-0 bg-transparent px-3 py-2 text-xs sm:text-sm font-mono text-gray-800 dark:text-gray-100 focus:ring-0"
+                                    />
+                                </div>
+                            </div>
+
+                            <p class="text-[0.6875rem] text-gray-500 dark:text-slate-400 flex items-center gap-1.5 flex-wrap">
+                                <span>پیش‌نمایش نشانی نهایی:</span>
+                                <code id="article-permalink-preview" dir="ltr" class="font-mono text-gray-700 dark:text-slate-300 underline decoration-dotted">
+                                    https://rasadnews.ir/news/ai-national-infrastructure-report
+                                </code>
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Rich Text Editor (WYSIWYG) Simulation -->
+                    <section aria-labelledby="editor-label" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 shadow-sm overflow-hidden">
+                        <div class="px-5 py-3.5 border-b border-gray-200 dark:border-slate-700/80 flex flex-wrap items-center justify-between gap-3 bg-gray-50/80 dark:bg-slate-900/60">
+                            <span id="editor-label" class="text-xs font-bold text-gray-700 dark:text-slate-300">
+                                متن کامل خبر (ویرایشگر دیداری WYSIWYG)
+                            </span>
+
+                            <!-- Formatting & Alignment Toolbar -->
+                            <div role="toolbar" aria-label="نوار ابزار قالب‌بندی متن" class="flex flex-wrap items-center gap-1.5">
+                                <button
+                                    type="button"
+                                    data-editor-cmd="bold"
+                                    aria-label="بولد کردن متن"
+                                    class="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-black text-gray-800 dark:text-slate-100 hover:border-primary/50 hover:text-primary transition-colors"
+                                >
+                                    B
+                                </button>
+                                <button
+                                    type="button"
+                                    data-editor-cmd="italic"
+                                    aria-label="مورب کردن متن"
+                                    class="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-serif italic font-bold text-gray-800 dark:text-slate-100 hover:border-primary/50 hover:text-primary transition-colors"
+                                >
+                                    I
+                                </button>
+                                <button
+                                    type="button"
+                                    data-editor-cmd="underline"
+                                    aria-label="زیرخط‌دار کردن متن"
+                                    class="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs underline font-bold text-gray-800 dark:text-slate-100 hover:border-primary/50 hover:text-primary transition-colors"
+                                >
+                                    U
+                                </button>
+                                <button
+                                    type="button"
+                                    data-editor-cmd="insertUnorderedList"
+                                    aria-label="فهرست نشانه‌دار"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-gray-700 dark:text-slate-200 hover:border-primary/50 hover:text-primary transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                                    </svg>
+                                    <span>فهرست</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    data-editor-cmd="createLink"
+                                    aria-label="درج پیوند"
+                                    class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-gray-700 dark:text-slate-200 hover:border-primary/50 hover:text-primary transition-colors"
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                    </svg>
+                                    <span>پیوند</span>
+                                </button>
+
+                                <span aria-hidden="true" class="h-4 w-px bg-gray-300 dark:bg-slate-700 mx-1"></span>
+
+                                <button
+                                    type="button"
+                                    data-editor-align="right"
+                                    aria-pressed="true"
+                                    aria-label="چیدمان راست‌چین"
+                                    class="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-primary text-white text-[0.6875rem] font-bold transition-colors"
+                                >
+                                    راست‌چین
+                                </button>
+                                <button
+                                    type="button"
+                                    data-editor-align="center"
+                                    aria-pressed="false"
+                                    aria-label="چیدمان وسط‌چین"
+                                    class="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 text-[0.6875rem] font-bold hover:border-primary/50 transition-colors"
+                                >
+                                    وسط‌چین
+                                </button>
+                                <button
+                                    type="button"
+                                    data-editor-align="left"
+                                    aria-pressed="false"
+                                    aria-label="چیدمان چپ‌چین"
+                                    class="px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-gray-700 dark:text-slate-200 text-[0.6875rem] font-bold hover:border-primary/50 transition-colors"
+                                >
+                                    چپ‌چین
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Contenteditable WYSIWYG Area -->
+                        <div class="cms-editor-shell relative p-5">
+                            <div
+                                id="article-editor-body"
+                                contenteditable="true"
+                                role="textbox"
+                                aria-multiline="true"
+                                aria-labelledby="editor-label"
+                                data-placeholder="متن کامل خبر یا گزارش تحلیلی را اینجا بنویسید..."
+                                class="cms-editor-surface min-h-80 text-sm sm:text-base leading-8 text-gray-800 dark:text-slate-200 text-right space-y-4 rounded-xl border border-gray-200 dark:border-slate-700 p-4 focus:outline-none focus:ring-2 focus:ring-primary/25 focus:border-primary"
+                            >لید خبر: تازه‌ترین ارزیابی‌های تخصصی نشان می‌دهد سرمایه‌گذاری هدفمند در زیرساخت‌های دیجیتال و سامانه‌های هوشمند، بهره‌وری شبکه تولید و صادرات غیرنفتی را با شتاب قابل توجهی افزایش داده است.</div>
+                            <textarea
+                                id="article-content-input"
+                                name="content"
+                                class="sr-only"
+                                tabindex="-1"
+                                aria-hidden="true"
+                            ></textarea>
+                            <div id="article-content-error" aria-live="polite"></div>
+                        </div>
+                    </section>
+
+                    <!-- SEO Section (Meta Title & Meta Description) -->
+                    <section aria-labelledby="seo-section-heading" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 p-6 shadow-sm space-y-4">
+                        <h2 id="seo-section-heading" class="text-sm sm:text-base font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+                            <span class="w-1.5 h-5 rounded-full bg-primary inline-block" aria-hidden="true"></span>
+                            تنظیمات سئو (SEO)
+                        </h2>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="seo-meta-title" class="text-xs font-bold text-gray-700 dark:text-slate-300">
+                                    عنوان سئو (Meta Title)
+                                </label>
+                                <span id="seo-title-counter" class="text-[0.6875rem] text-gray-500 dark:text-slate-400">۰ / ۶۰ کاراکتر</span>
+                            </div>
+                            <input
+                                type="text"
+                                id="seo-meta-title"
+                                name="metaTitle"
+                                maxlength="90"
+                                placeholder="عنوان کوتاه و دقیق برای نمایش در نتایج موتور جستجو..."
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-white text-sm focus:border-primary focus:ring-2 focus:ring-primary/25 transition-colors"
+                            />
+                        </div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-1.5">
+                                <label for="seo-meta-desc" class="text-xs font-bold text-gray-700 dark:text-slate-300">
+                                    توضیحات متا (Meta Description)
+                                </label>
+                                <span id="seo-desc-counter" class="text-[0.6875rem] text-gray-500 dark:text-slate-400">۰ / ۱۶۰ کاراکتر</span>
+                            </div>
+                            <textarea
+                                id="seo-meta-desc"
+                                name="metaDescription"
+                                rows="3"
+                                maxlength="220"
+                                placeholder="خلاصه ۱ تا ۲ جمله‌ای شامل کلیدواژه‌های اصلی خبر..."
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-white text-sm leading-6 focus:border-primary focus:ring-2 focus:ring-primary/25 transition-colors"
+                            ></textarea>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sidebar Settings (4 Columns) -->
+                <aside aria-label="تنظیمات انتشار، دسته‌بندی‌ها، برچسب‌ها و تصویر شاخص" class="lg:col-span-4 space-y-6">
+                    <!-- 1. Publish Box -->
+                    <section aria-labelledby="publish-box-heading" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 p-5 shadow-sm space-y-4">
+                        <div class="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-700/80">
+                            <h2 id="publish-box-heading" class="text-sm font-extrabold text-gray-900 dark:text-white">انتشار</h2>
+                            <span id="article-status-badge" class="px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 text-[0.6875rem] font-bold">
+                                پیش‌نویس
+                            </span>
+                        </div>
+
+                        <div>
+                            <label for="article-status-select" class="block text-xs font-bold text-gray-700 dark:text-slate-300 mb-1.5">
+                                وضعیت انتشار
+                            </label>
+                            <div class="relative">
+                                <select
+                                    id="article-status-select"
+                                    name="status"
+                                    class="w-full appearance-none pr-3.5 pl-9 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-white text-sm font-medium focus:border-primary focus:ring-2 focus:ring-primary/25 transition-colors cursor-pointer"
+                                >
+                                    <option value="draft" selected>پیش‌نویس (Draft)</option>
+                                    <option value="pending">در انتظار بازبینی سردبیر</option>
+                                    <option value="scheduled">زمان‌بندی‌شده (Scheduled)</option>
+                                    <option value="published">منتشرشده (Published)</option>
+                                </select>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 text-gray-400 dark:text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true">
+                                    <path d="m6 9 6 6 6-6" />
+                                </svg>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="publish-date" class="block text-xs font-bold text-gray-700 dark:text-slate-300 mb-1.5">
+                                تاریخ و زمان انتشار (شمسی)
+                            </label>
+                            <div class="relative">
+                                <input
+                                    type="text"
+                                    id="publish-date"
+                                    name="publishDate"
+                                    data-jdp
+                                    dir="ltr"
+                                    autocomplete="off"
+                                    readonly
+                                    placeholder="1405/08/20 14:30"
+                                    aria-describedby="publish-date-hint"
+                                    class="w-full pl-3.5 pr-10 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-white text-sm font-medium text-left tabular-nums placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-primary focus:ring-2 focus:ring-primary/25 transition-colors cursor-pointer"
+                                />
+                                <button
+                                    type="button"
+                                    id="publish-date-trigger"
+                                    aria-label="باز کردن تقویم شمسی و انتخاب ساعت انتشار"
+                                    class="absolute inset-y-0 right-0 px-3 flex items-center text-gray-400 hover:text-primary dark:text-slate-400 dark:hover:text-red-400 transition-colors"
+                                >
+                                    <!-- Lucide: calendar-clock -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 shrink-0" aria-hidden="true">
+                                        <path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5" />
+                                        <path d="M16 2v4" />
+                                        <path d="M8 2v4" />
+                                        <path d="M3 10h5" />
+                                        <path d="M17.5 17.5 16 16.3V14" />
+                                        <circle cx="16" cy="16" r="6" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p id="publish-date-hint" class="mt-1.5 text-[0.6875rem] text-gray-500 dark:text-slate-400">
+                                برای انتشار فوری خالی بگذارید؛ فرمت ۲۴ ساعته: <span dir="ltr" class="font-mono">YYYY/MM/DD HH:MM</span>
+                            </p>
+                        </div>
+
+                        <ul class="space-y-2 text-xs text-gray-600 dark:text-slate-300 pt-1">
+                            <li class="flex items-center justify-between">
+                                <span>نویسنده:</span>
+                                <span class="inline-flex items-center gap-2">
+                                    <img src="../assets/images/avatar.jpg" alt="تصویر مهراد کاظمی" class="w-6 h-6 rounded-full object-cover object-top border border-gray-200 dark:border-slate-700 bg-slate-200 dark:bg-slate-700 shrink-0" />
+                                    <strong class="text-gray-900 dark:text-white">مهراد کاظمی</strong>
+                                </span>
+                            </li>
+                            <li class="flex justify-between"><span>نمایش در سایت:</span><strong class="text-gray-900 dark:text-white">عمومی</strong></li>
+                        </ul>
+
+                        <div class="space-y-2.5 pt-2">
+                            <button
+                                type="submit"
+                                id="publish-article-btn"
+                                class="w-full py-3 px-4 rounded-xl bg-primary hover:bg-primary-700 text-white text-sm font-extrabold shadow-md shadow-primary/20 transition-colors"
+                            >
+                                انتشار خبر
+                            </button>
+                            <button
+                                type="button"
+                                id="save-draft-btn"
+                                class="w-full py-2.5 px-3 rounded-xl border border-gray-300 dark:border-slate-600 bg-gray-50 dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-700 text-gray-800 dark:text-white text-xs font-bold transition-colors"
+                            >
+                                ذخیره به عنوان پیش‌نویس
+                            </button>
+                        </div>
+                    </section>
+
+                    <!-- 2. Categories Box (Scrollable List of Checkboxes) -->
+                    <section id="article-categories-section" aria-labelledby="write-categories-heading" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 p-5 shadow-sm space-y-3.5 transition-colors">
+                        <div class="flex items-center justify-between pb-2.5 border-b border-gray-100 dark:border-slate-700/80">
+                            <h2 id="write-categories-heading" class="text-sm font-extrabold text-gray-900 dark:text-white">دسته‌بندی‌ها</h2>
+                            <a href="admin-categories.html" class="text-[0.6875rem] font-bold text-primary dark:text-red-400 hover:underline">
+                                مدیریت دسته‌ها ←
+                            </a>
+                        </div>
+
+                        <div id="article-categories-group" class="max-h-48 overflow-y-auto pl-2 space-y-2.5 text-sm">
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="politics" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs sm:text-sm text-gray-700 dark:text-slate-200 font-medium">سیاست داخلی و دیپلماسی</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="technology" checked class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs sm:text-sm text-gray-700 dark:text-slate-200 font-medium">فناوری و نوآوری</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 pr-5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="ai" checked class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs text-gray-600 dark:text-slate-300">هوش مصنوعی و داده</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="economy" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs sm:text-sm text-gray-700 dark:text-slate-200 font-medium">اقتصاد و بازار سرمایه</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 pr-5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="energy" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs text-gray-600 dark:text-slate-300">انرژی و تجارت خارجی</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="sports" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs sm:text-sm text-gray-700 dark:text-slate-200 font-medium">ورزش و لیگ برتر</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="culture" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs sm:text-sm text-gray-700 dark:text-slate-200 font-medium">فرهنگ، کتاب و سینما</span>
+                            </label>
+                            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+                                <input type="checkbox" name="categories[]" value="world" class="w-4 h-4 rounded border-gray-300 dark:border-slate-600 text-primary focus:ring-primary/40" />
+                                <span class="text-xs sm:text-sm text-gray-700 dark:text-slate-200 font-medium">اخبار بین‌الملل</span>
+                            </label>
+                        </div>
+                        <div id="article-categories-error" aria-live="polite"></div>
+                    </section>
+
+                    <!-- 3. Tags Box (Badge-Style Tag Input Simulation) -->
+                    <section aria-labelledby="write-tags-heading" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 p-5 shadow-sm space-y-3.5">
+                        <h2 id="write-tags-heading" class="text-sm font-extrabold text-gray-900 dark:text-white pb-2.5 border-b border-gray-100 dark:border-slate-700/80">
+                            برچسب‌ها (Tags)
+                        </h2>
+
+                        <div class="flex gap-2">
+                            <label for="article-tag-input" class="sr-only">افزودن برچسب</label>
+                            <input
+                                type="text"
+                                id="article-tag-input"
+                                placeholder="برچسب جدید + Enter..."
+                                class="flex-1 min-w-0 px-3 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-900 text-gray-900 dark:text-white text-xs focus:border-primary focus:ring-2 focus:ring-primary/25 transition-colors"
+                            />
+                            <button
+                                type="button"
+                                id="add-tag-btn"
+                                class="px-3.5 py-2 rounded-xl bg-slate-900 dark:bg-slate-700 hover:bg-primary text-white text-xs font-bold shrink-0 transition-colors"
+                            >
+                                افزودن
+                            </button>
+                        </div>
+
+                        <div id="article-tags-list" aria-label="برچسب‌های انتخاب‌شده" class="flex flex-wrap items-center gap-2">
+                            <span data-tag-value="هوش مصنوعی" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-950/60 text-primary dark:text-red-300 border border-primary/20 text-xs font-semibold">
+                                <span>هوش مصنوعی</span>
+                                <button type="button" data-remove-tag="true" aria-label="حذف برچسب هوش مصنوعی" class="text-primary/70 hover:text-primary dark:text-red-300 dark:hover:text-white font-bold leading-none">×</button>
+                            </span>
+                            <span data-tag-value="اقتصاد دیجیتال" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-950/60 text-primary dark:text-red-300 border border-primary/20 text-xs font-semibold">
+                                <span>اقتصاد دیجیتال</span>
+                                <button type="button" data-remove-tag="true" aria-label="حذف برچسب اقتصاد دیجیتال" class="text-primary/70 hover:text-primary dark:text-red-300 dark:hover:text-white font-bold leading-none">×</button>
+                            </span>
+                            <span data-tag-value="گزارش ویژه" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-950/60 text-primary dark:text-red-300 border border-primary/20 text-xs font-semibold">
+                                <span>گزارش ویژه</span>
+                                <button type="button" data-remove-tag="true" aria-label="حذف برچسب گزارش ویژه" class="text-primary/70 hover:text-primary dark:text-red-300 dark:hover:text-white font-bold leading-none">×</button>
+                            </span>
+                        </div>
+                    </section>
+
+                    <!-- 4. Featured Image Box (Dashed Drag & Drop Area) -->
+                    <section aria-labelledby="featured-image-heading" class="rounded-2xl bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700/80 p-5 shadow-sm space-y-4">
+                        <h2 id="featured-image-heading" class="text-sm font-extrabold text-gray-900 dark:text-white pb-2.5 border-b border-gray-100 dark:border-slate-700/80">
+                            تصویر شاخص (Featured Image)
+                        </h2>
+
+                        <div
+                            id="featured-image-dropzone"
+                            class="rounded-2xl border-2 border-dashed border-gray-300 dark:border-slate-600 bg-gray-50/70 dark:bg-slate-900/60 p-6 text-center space-y-3 transition-colors"
+                        >
+                            <input
+                                type="file"
+                                id="featured-image-input"
+                                accept="image/*"
+                                class="sr-only"
+                            />
+                            <span class="mx-auto w-12 h-12 rounded-2xl bg-primary-50 dark:bg-primary-950/60 text-primary dark:text-red-400 inline-flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                </svg>
+                            </span>
+                            <div class="space-y-1">
+                                <p class="text-xs font-bold text-gray-800 dark:text-slate-200">
+                                    تصویر شاخص را اینجا بکشید و رها کنید
+                                </p>
+                                <p class="text-[0.6875rem] text-gray-500 dark:text-slate-400">
+                                    فرمت‌های JPG، PNG یا WebP (نسبت ۱۶:۹)
+                                </p>
+                            </div>
+                            <button
+                                type="button"
+                                id="featured-image-trigger"
+                                class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-800 hover:border-primary/50 text-xs font-bold text-gray-700 dark:text-slate-200 transition-colors"
+                            >
+                                انتخاب فایل از سیستم
+                            </button>
+                        </div>
+
+                        <!-- Selected Image Preview -->
+                        <div id="featured-image-preview-wrap" class="hidden space-y-2.5 pt-1">
+                            <div class="rounded-xl overflow-hidden border border-gray-200 dark:border-slate-700 aspect-video bg-gray-100 dark:bg-slate-900">
+                                <img id="featured-image-preview" src="../assets/images/hero-banner.jpg" alt="پیش‌نمایش تصویر شاخص خبر" class="w-full h-full object-cover" />
+                            </div>
+                            <div class="flex items-center justify-between gap-2 text-xs">
+                                <span id="featured-image-filename" class="text-gray-600 dark:text-slate-300 truncate font-medium"></span>
+                                <button
+                                    type="button"
+                                    id="featured-image-remove-btn"
+                                    class="text-rose-600 dark:text-rose-400 font-bold hover:underline shrink-0"
+                                >
+                                    حذف تصویر
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </aside>
+            </form>
+        </main>
+    </div>
+
+    <!-- External Modular JavaScript -->
+    <script src="../assets/js/libs/jalali-datepicker.min.js" defer></script>
+    <script src="../assets/js/components.js" defer></script>
+    <script src="../assets/js/main.js" defer></script>
+    <script src="../assets/js/libs/just-validate.min.js" defer></script>
+    <script src="../assets/js/validation.js" defer></script>
+</body>
+</html>
