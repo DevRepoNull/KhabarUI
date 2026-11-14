@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="مستندات و کتابخانه کامپوننت‌های قالب خبری رصد — راهنمای جامع استفاده، ترکیب قطعات و ابزارهای جاوااسکریپت برای برنامه‌نویسان" />
+    <title>مستندات کامپوننت‌ها و ابزارها | قالب خبری رصد (KhabarUI)</title>
+
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/favicon.png" />
+
+    <!-- Theme Initialization -->
+    <script>(function(){try{var t=localStorage.getItem('news-agency-theme');var d=t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme:dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.classList.toggle('light',!d);}catch(e){}})();</script>
+    
+    <!-- Local Stylesheets -->
+    <link rel="stylesheet" href="assets/css/jalali-datepicker.min.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <style>
+        .code-snippet {
+            direction: ltr;
+            text-align: left;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+        .preview-box {
+            background-image: radial-gradient(rgba(100, 116, 139, 0.12) 1px, transparent 0);
+            background-size: 16px 16px;
+        }
+        .dark .preview-box {
+            background-image: radial-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 0);
+        }
+
+        /* Bulletproof docs layout independent of purged Tailwind classes */
+        .docs-layout-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            width: 100%;
+        }
+        @media (min-width: 1024px) {
+            .docs-layout-grid {
+                grid-template-columns: 17.5rem minmax(0, 1fr);
+            }
+        }
+        .docs-sidebar-sticky {
+            position: sticky;
+            top: 5rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-white font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col">
+
+    <!-- Page Preloader -->
+    <div id="rasad-page-loader" class="rasad-page-loader" role="status" aria-live="polite" aria-label="در حال بارگذاری صفحه">
+        <div class="rasad-loader-emblem" aria-hidden="true">
+            <span class="rasad-loader-ring-outer"></span>
+            <span class="rasad-loader-ring-inner"></span>
+            <span class="rasad-loader-core">ر</span>
+        </div>
+        <div class="rasad-loader-meta">
+            <span class="rasad-loader-brand">مستندات KhabarUI</span>
+            <span class="rasad-loader-status">در حال بارگذاری راهنمای کامپوننت‌ها...</span>
+        </div>
+        <div class="rasad-loader-track" aria-hidden="true"><span class="rasad-loader-fill"></span></div>
+    </div>
+
+    <!-- Top Sticky Header -->
+    <header class="sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-primary text-white shadow-sm hover:bg-primary-900 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+                    </svg>
+                </a>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+                            مستندات <span class="text-primary dark:text-red-400">کامپوننت‌های رصد</span>
+                        </h1>
+                        <span class="hidden sm:inline-flex px-2 py-0.5 rounded text-[0.6875rem] font-bold bg-primary-50 dark:bg-primary-950/70 text-primary dark:text-red-300">
+                            نسخه 1.0.0
+                        </span>
+                    </div>
+                    <p class="text-[0.6875rem] text-slate-500 dark:text-slate-400">راهنمای استفاده و ترکیب المان‌ها برای توسعه‌دهندگان (Developer Hub)</p>
+                </div>
+            </div>
+
+            <!-- Header Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Search Component Input -->
+                <div class="relative hidden md:block w-64">
+                    <input
+                        type="text"
+                        id="component-search-input"
+                        placeholder="جستجوی کامپوننت یا ابزار..."
+                        class="w-full pl-3 pr-9 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                    />
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 absolute right-3 top-2.5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+
+                <a href="index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    <span>پورتال اصلی</span>
+                </a>
+
+                <a href="https://github.com/DevRepoNull/KhabarUI" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 dark:bg-slate-800 text-white text-xs font-semibold hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+                    </svg>
+                    <span>گیت‌هاب</span>
+                </a>
+
+                <!-- Theme Toggle Button -->
+                <button
+                    type="button"
+                    id="theme-toggle-btn"
+                    role="switch"
+                    aria-checked="false"
+                    aria-label="فعال‌سازی حالت تاریک"
+                    class="inline-flex items-center rounded-full p-0.5 focus-visible:outline-none shrink-0"
+                >
+                    <span class="theme-switch-track">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-indigo-400 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-amber-500 z-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+                        </svg>
+                        <span class="theme-switch-thumb" aria-hidden="true"></span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1">
+        <div class="docs-layout-grid">
+            <!-- Sidebar Navigation (Sticky) -->
+            <aside class="w-full">
+                <div class="docs-sidebar-sticky space-y-6">
+                    <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 shadow-sm">
+                        <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">فهرست موضوعی مستندات</h2>
+                        <nav class="space-y-1 text-xs font-semibold">
+                            <a href="#section-quickstart" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🚀 معرفی و راه‌اندازی سریع</span>
+                            </a>
+                            <a href="#section-colors" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🎨 رنگ‌ها و تایپوگرافی</span>
+                            </a>
+                            <a href="#section-buttons" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🔘 دکمه‌ها (Buttons)</span>
+                            </a>
+                            <a href="#section-badges" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🏷️ نشان‌ها و بج‌ها (Badges)</span>
+                            </a>
+                            <a href="#section-forms" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>📝 فرم‌ها و ورودی‌ها (Inputs)</span>
+                            </a>
+                            <a href="#section-news-cards" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>📰 کارت‌های خبری (News Cards)</span>
+                            </a>
+                            <a href="#section-ticker" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>⚡ نوار اخبار فوری (Ticker)</span>
+                            </a>
+                            <a href="#section-tabs" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🗂️ سیستم تب‌ها (Tabs)</span>
+                            </a>
+                            <a href="#section-datepicker" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>📅 تقویم جلالی (Datepicker)</span>
+                            </a>
+                            <a href="#section-validation" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🛡️ اعتبارسنجی (Just-Validate)</span>
+                            </a>
+                            <a href="#section-toasts" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🔔 اعلان‌ها (Toast Alerts)</span>
+                            </a>
+                            <a href="#section-skeletons" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>⏳ لودرهای اسکلتی (Skeletons)</span>
+                            </a>
+                            <a href="#section-megamenu" class="doc-nav-link flex items-center justify-between px-3 py-2 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <span>🧭 مگامنو (Mega Menu)</span>
+                            </a>
+                        </nav>
+                    </div>
+
+                    <div class="rounded-2xl border border-primary/20 bg-primary-50/50 dark:bg-primary-950/20 p-4 text-xs space-y-2">
+                        <p class="font-bold text-primary dark:text-red-300">💡 نکته برنامه‌نویسان:</p>
+                        <p class="text-slate-600 dark:text-slate-400 leading-5">
+                            هر کامپوننت را می‌توانید مستقیماً کپی کرده و در صفحات سفارشی خود پیست کنید. نیازی به فریم‌ورک‌های سنگین نیست!
+                        </p>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Stream -->
+            <main class="w-full min-w-0 space-y-8">
+
+            <!-- Section 1: Quickstart & Architecture -->
+            <section id="section-quickstart" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-4">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">معماری و شروع</span>
+                    <h2 class="text-2xl font-black text-slate-900 dark:text-white mt-1">🚀 معرفی و نحوه استفاده در پروژه</h2>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-2 leading-7">
+                        قالب <strong>KhabarUI</strong> بر پایه <strong>HTML5</strong>، <strong>Tailwind CSS v3</strong> و <strong>Vanilla JavaScript</strong> مهندسی شده است. تمامی اسکریپت‌ها و استایل‌ها به صورت کاملاً لوکال و آفلاین طراحی شده‌اند تا در هر محیطی (ASP.NET، لاراول، نود یا حتی به صورت لوکال با پروتکل <code class="font-mono text-xs bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded">file://</code>) بدون نقص اجرا شوند.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-1.5">
+                        <span class="font-bold text-slate-900 dark:text-white">۱. اتصال استایل‌ها (CSS)</span>
+                        <p class="text-slate-500 dark:text-slate-400 leading-5">فایل اصلی استایل‌ها در مسیر <code class="font-mono text-primary dark:text-red-400">assets/css/style.css</code> قرار دارد.</p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-1.5">
+                        <span class="font-bold text-slate-900 dark:text-white">۲. بارگذاری اسکریپت‌ها</span>
+                        <p class="text-slate-500 dark:text-slate-400 leading-5">دو فایل <code class="font-mono text-primary dark:text-red-400">components.js</code> و <code class="font-mono text-primary dark:text-red-400">main.js</code> در انتهای <code class="font-mono">&lt;body&gt;</code> لود می‌شوند.</p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-1.5">
+                        <span class="font-bold text-slate-900 dark:text-white">۳. ساختار کاملاً راست‌چین</span>
+                        <p class="text-slate-500 dark:text-slate-400 leading-5">تگ ریشه باید دارای خصوصیت‌های <code class="font-mono">&lt;html lang="fa" dir="rtl"&gt;</code> باشد.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 2: Colors & Typography -->
+            <section id="section-colors" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">طراحی پایه</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-1">🎨 پالت رنگی و متغیرهای برند رصد</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">رنگ‌های اصلی سازمانی و متغیرهای تعریف شده در <code class="font-mono">tailwind.config.js</code></p>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-lg bg-[#8B0000] shrink-0 shadow-sm"></span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">Dark Crimson</div>
+                            <div class="text-[0.6875rem] font-mono text-slate-500">bg-primary (#8B0000)</div>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-lg bg-[#ef4444] shrink-0 shadow-sm"></span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">Brand Red</div>
+                            <div class="text-[0.6875rem] font-mono text-slate-500">bg-brand-red (#ef4444)</div>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-lg bg-slate-900 shrink-0 shadow-sm"></span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">Dark Slate</div>
+                            <div class="text-[0.6875rem] font-mono text-slate-500">bg-slate-900 (#0f172a)</div>
+                        </div>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-3 flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 shrink-0 shadow-sm"></span>
+                        <div>
+                            <div class="text-xs font-bold text-slate-900 dark:text-white">Light Neutral</div>
+                            <div class="text-[0.6875rem] font-mono text-slate-500">bg-slate-50 (#f8fafc)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 3: Buttons -->
+            <section id="section-buttons" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-primary dark:text-red-400">المان‌های کلیک‌پذیر</span>
+                        <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">🔘 انواع دکمه‌ها (Buttons)</h2>
+                    </div>
+                </div>
+
+                <!-- Live Preview -->
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="text-xs font-bold text-slate-400 mb-4">پیش‌نمایش زنده:</div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Primary Button -->
+                        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-900 text-white text-xs font-bold shadow-sm transition-colors">
+                            <span>دکمه اصلی (Primary)</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 rtl-flip" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+
+                        <!-- Secondary Button -->
+                        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 text-xs font-bold transition-colors">
+                            <span>ثانویه (Secondary)</span>
+                        </button>
+
+                        <!-- Outline Button -->
+                        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 hover:border-primary text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-red-400 text-xs font-bold transition-colors">
+                            <span>حاشیه‌دار (Outline)</span>
+                        </button>
+
+                        <!-- Ghost Button -->
+                        <button type="button" class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-red-400 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold transition-colors">
+                            <span>شبح (Ghost)</span>
+                        </button>
+
+                        <!-- Danger Button -->
+                        <button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors">
+                            <span>حذف / خطر (Danger)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Code Snippet -->
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">HTML Snippet</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- Primary Crimson Button --&gt;
+&lt;button type="button" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary hover:bg-primary-900 text-white text-xs font-bold shadow-sm transition-colors"&gt;
+    &lt;span&gt;دکمه اصلی&lt;/span&gt;
+    &lt;svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 rtl-flip" fill="none" viewBox="0 0 24 24" stroke="currentColor"&gt;
+        &lt;path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /&gt;
+    &lt;/svg&gt;
+&lt;/button&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 4: Badges & Tags -->
+            <section id="section-badges" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">برچسب‌ها</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">🏷️ نشان‌ها و بج‌های وضعیت (Badges)</h2>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-950/60 text-primary dark:text-red-300 text-xs font-bold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-primary dark:bg-red-400 animate-pulse"></span>
+                            <span>سیاست داخلی</span>
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            <span>منتشر شده</span>
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 dark:bg-amber-950/60 text-amber-700 dark:text-amber-300 text-xs font-bold">
+                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                            <span>پیش‌نویس</span>
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 text-xs font-bold">
+                            <span>فوری</span>
+                        </span>
+                        <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[0.6875rem] font-mono">
+                            #فناوری
+                        </span>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">HTML Snippet</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- Category Badge with Pulse Dot --&gt;
+&lt;span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-50 dark:bg-primary-950/60 text-primary dark:text-red-300 text-xs font-bold"&gt;
+    &lt;span class="w-1.5 h-1.5 rounded-full bg-primary dark:bg-red-400 animate-pulse"&gt;&lt;/span&gt;
+    &lt;span&gt;سیاست داخلی&lt;/span&gt;
+&lt;/span&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 5: Forms & Inputs -->
+            <section id="section-forms" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">ورودی‌ها</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">📝 کنترل‌های فرم و ورودی‌ها (Inputs)</h2>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Text Input with Label -->
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">عنوان فیلد ورودی</label>
+                            <input type="text" placeholder="متن تستی..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" />
+                        </div>
+
+                        <!-- Password with toggle -->
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">رمز عبور با دکمه مشاهده</label>
+                            <div class="relative">
+                                <input type="password" id="demo-pass-field" value="secret1234" class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" />
+                                <button type="button" onclick="togglePasswordVisibility('demo-pass-field', this)" class="absolute left-3 top-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+                                    <svg class="w-4 h-4 eye-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Select -->
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">انتخاب سرویس خبری</label>
+                            <select class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all">
+                                <option>سیاسی</option>
+                                <option>اقتصادی</option>
+                                <option>فناوری و استارتاپ</option>
+                            </select>
+                        </div>
+
+                        <!-- Checkboxes & Radios -->
+                        <div class="space-y-2 pt-2">
+                            <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                <input type="checkbox" checked class="w-4 h-4 rounded text-primary focus:ring-primary border-slate-300 dark:border-slate-600" />
+                                <span>چک‌باکس با رنگ اختصاصی Dark Crimson</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                <input type="radio" name="demo-radio" checked class="w-4 h-4 text-primary focus:ring-primary border-slate-300 dark:border-slate-600" />
+                                <span>رادیوباتن سازمانی</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">HTML Snippet</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- Styled Form Input --&gt;
+&lt;input type="text" placeholder="عنوان فیلد..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all" /&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 6: News Cards -->
+            <section id="section-news-cards" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">ساختار چیدمان محتوا</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">📰 کارت‌های خبری (News Cards)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">الگوهای مختلف نمایش خبر در صفحه اصلی، آرشیو و سایدبار</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Standard Grid Card -->
+                        <article class="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 overflow-hidden hover:border-primary/50 transition-all">
+                            <a href="frontend/single.html" class="block aspect-video overflow-hidden bg-slate-200 dark:bg-slate-800 relative">
+                                <img src="assets/images/news-1.jpg" alt="عنوان خبر" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                                <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-md text-white text-[0.6875rem] font-bold">
+                                    اقتصاد کلان
+                                </span>
+                            </a>
+                            <div class="p-4 space-y-2">
+                                <div class="flex items-center justify-between text-[0.6875rem] text-slate-500 dark:text-slate-400">
+                                    <span>تحریریه رصد</span>
+                                    <time datetime="2026-11-14">۱۰ دقیقه پیش</time>
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-primary dark:group-hover:text-red-400 line-clamp-2 leading-6">
+                                    گزارش تخصصی از تحولات نرخ ارز و چشم‌انداز بازارهای مالی در پاییز امسال
+                                </h3>
+                                <p class="text-xs text-slate-600 dark:text-slate-400 line-clamp-2 leading-5">
+                                    بررسی آمارهای تحلیلی بانک مرکزی و تاثیر تصمیمات جدید بر تولید و تجارت خارجی...
+                                </p>
+                            </div>
+                        </article>
+
+                        <!-- Compact List Item -->
+                        <div class="space-y-3">
+                            <span class="text-xs font-bold text-slate-400">کارت فشرده سایدبار / پربحث‌ترین‌ها:</span>
+                            <article class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <img src="assets/images/news-2.jpg" alt="تیتر خبر" class="w-20 h-16 rounded-lg object-cover shrink-0" />
+                                <div class="min-w-0 flex-1">
+                                    <span class="text-[0.6875rem] font-bold text-primary dark:text-red-400">فناوری</span>
+                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white line-clamp-2 leading-5 mt-0.5">
+                                        رونمایی از نسل جدید هوش مصنوعی چندوجهی با قابلیت پردازش زبان فارسی
+                                    </h4>
+                                    <div class="text-[0.625rem] text-slate-400 mt-1">۲ ساعت پیش</div>
+                                </div>
+                            </article>
+
+                            <article class="flex items-center gap-3 p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/40 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                                <img src="assets/images/news-3.jpg" alt="تیتر خبر" class="w-20 h-16 rounded-lg object-cover shrink-0" />
+                                <div class="min-w-0 flex-1">
+                                    <span class="text-[0.6875rem] font-bold text-amber-500">جامعه</span>
+                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white line-clamp-2 leading-5 mt-0.5">
+                                        جزئیات تازه از شرایط دریافت تسهیلات حمایتی برای کسب‌وکارهای نوپا
+                                    </h4>
+                                    <div class="text-[0.625rem] text-slate-400 mt-1">۴ ساعت پیش</div>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">HTML Snippet (Grid Post Card)</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- Responsive News Grid Card --&gt;
+&lt;article class="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/60 overflow-hidden hover:border-primary/50 transition-all"&gt;
+    &lt;a href="single.html" class="block aspect-video overflow-hidden bg-slate-200 dark:bg-slate-800 relative"&gt;
+        &lt;img src="assets/images/news-1.jpg" alt="عنوان خبر" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" /&gt;
+        &lt;span class="absolute top-3 right-3 px-2.5 py-1 rounded-md bg-slate-900/80 backdrop-blur-md text-white text-[0.6875rem] font-bold"&gt;دسته‌بندی&lt;/span&gt;
+    &lt;/a&gt;
+    &lt;div class="p-4 space-y-2"&gt;
+        &lt;div class="flex items-center justify-between text-[0.6875rem] text-slate-500 dark:text-slate-400"&gt;
+            &lt;span&gt;نویسنده&lt;/span&gt;
+            &lt;time&gt;۱۰ دقیقه پیش&lt;/time&gt;
+        &lt;/div&gt;
+        &lt;h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-primary dark:group-hover:text-red-400 line-clamp-2 leading-6"&gt;
+            تیتر کامل خبر با قابلیت محدودسازی خودکار به دو سطر...
+        &lt;/h3&gt;
+    &lt;/div&gt;
+&lt;/article&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 7: Breaking News Ticker -->
+            <section id="section-ticker" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">انیمیشن و مارکی</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">⚡ نوار متحرک اخبار فوری (Breaking News Ticker)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">حرکت نرم و پیوسته در جهت راست‌چین (RTL) با توقف خودکار هنگام قرارگیری ماوس (Pause on Hover)</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800/80 p-2 flex items-center gap-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-bold shrink-0 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                            <span>اخبار فوری</span>
+                        </span>
+                        <div class="ticker-viewport overflow-hidden flex-1 py-1">
+                            <div class="ticker-track">
+                                <div class="ticker-group">
+                                    <a href="#" class="ticker-item text-slate-800 dark:text-slate-200">افزایش سقف اعتبارات پروژه‌های عمرانی در سال آینده به تصویب رسید</a>
+                                    <a href="#" class="ticker-item text-slate-800 dark:text-slate-200">رشد ۲۵ درصدی ترانزیت کالا از بنادر اصلی جنوب کشور در ماه گذشته</a>
+                                    <a href="#" class="ticker-item text-slate-800 dark:text-slate-200">آغاز ثبت‌نام مرحله دوم آزمون استخدامی متمرکز دستگاه‌های اجرایی</a>
+                                </div>
+                                <div class="ticker-group" aria-hidden="true">
+                                    <a href="#" class="ticker-item text-slate-800 dark:text-slate-200">افزایش سقف اعتبارات پروژه‌های عمرانی در سال آینده به تصویب رسید</a>
+                                    <a href="#" class="ticker-item text-slate-800 dark:text-slate-200">رشد ۲۵ درصدی ترانزیت کالا از بنادر اصلی جنوب کشور در ماه گذشته</a>
+                                    <a href="#" class="ticker-item text-slate-800 dark:text-slate-200">آغاز ثبت‌نام مرحله دوم آزمون استخدامی متمرکز دستگاه‌های اجرایی</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">HTML Snippet</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- Ticker markup using .ticker-viewport and .ticker-track from style.css --&gt;
+&lt;div class="ticker-viewport overflow-hidden"&gt;
+    &lt;div class="ticker-track"&gt;
+        &lt;div class="ticker-group"&gt;
+            &lt;a href="#" class="ticker-item"&gt;متن خبر اول...&lt;/a&gt;
+            &lt;a href="#" class="ticker-item"&gt;متن خبر دوم...&lt;/a&gt;
+        &lt;/div&gt;
+        &lt;div class="ticker-group" aria-hidden="true"&gt;
+            &lt;a href="#" class="ticker-item"&gt;متن خبر اول...&lt;/a&gt;
+            &lt;a href="#" class="ticker-item"&gt;متن خبر دوم...&lt;/a&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 8: Interactive Tabs -->
+            <section id="section-tabs" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">ماژول جاوااسکریپت</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">🗂️ سیستم تب‌های تعاملی (NewsComponents.initTabs)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">پشتیبانی کامل از استاندارد ARIA، سوییچ با کلیدهای جهت‌نما (Arrow Keys)، کلیدهای Home و End در محیط راست‌چین</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div id="demo-tabs-container" class="space-y-4">
+                        <!-- Tab Header Buttons -->
+                        <div role="tablist" class="flex items-center gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-800 text-xs max-w-md">
+                            <button role="tab" data-tab-target="tab-latest" aria-selected="true" class="flex-1 py-2 px-3 rounded-lg font-bold transition-all bg-white dark:bg-slate-800 text-primary dark:text-red-400 shadow-sm">
+                                تازه‌ترین‌ها
+                            </button>
+                            <button role="tab" data-tab-target="tab-popular" aria-selected="false" class="flex-1 py-2 px-3 rounded-lg font-bold transition-all text-slate-600 dark:text-slate-400">
+                                پربازدیدترین‌ها
+                            </button>
+                            <button role="tab" data-tab-target="tab-special" aria-selected="false" class="flex-1 py-2 px-3 rounded-lg font-bold transition-all text-slate-600 dark:text-slate-400">
+                                ویژه تحریریه
+                            </button>
+                        </div>
+
+                        <!-- Tab Panels -->
+                        <div class="pt-2">
+                            <div role="tabpanel" data-tab-panel="tab-latest" class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-700 dark:text-slate-300 leading-6">
+                                <strong>محتوای تب تازه‌ترین‌ها:</strong> لیست آخرین رویدادهای مخابره شده طی ۲ ساعت اخیر با اتصال به دیتابیس به صورت لحظه‌ای.
+                            </div>
+                            <div role="tabpanel" data-tab-panel="tab-popular" class="hidden p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-700 dark:text-slate-300 leading-6">
+                                <strong>محتوای تب پربازدیدترین‌ها:</strong> بیشترین اخبار مطالعه شده توسط کاربران در طول ۲۴ ساعت گذشته.
+                            </div>
+                            <div role="tabpanel" data-tab-panel="tab-special" class="hidden p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 text-xs text-slate-700 dark:text-slate-300 leading-6">
+                                <strong>محتوای تب ویژه تحریریه:</strong> یادداشت‌ها و سرمقاله‌های منتخب دبیران سرویس خبرگزاری رصد.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">JavaScript Integration</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد JS</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>// راه‌اندازی تب‌ها توسط ماژول داخلی NewsComponents
+const container = document.getElementById('demo-tabs-container');
+window.NewsComponents.initTabs(container, (activeTabName) => {
+    console.log('تب فعال شد:', activeTabName);
+});</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 9: Jalali Datepicker -->
+            <section id="section-datepicker" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">ابزار تاریخ و زمان</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">📅 انتخاب‌گر تاریخ شمسی جلالی (Jalali Datepicker)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">کتابخانه سبک و آفلاین برای انتخاب تاریخ‌های خورشیدی در فرم‌های جستجو، فیلتر آرشیو و انتشار خبر در پنل مدیریت</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="max-w-md space-y-2">
+                        <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">انتخاب تاریخ شمسی (روی اینپوت کلیک کنید):</label>
+                        <div class="relative">
+                            <input
+                                type="text"
+                                data-jdp
+                                placeholder="۱۴۰۳/۰۸/۲۴"
+                                class="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all font-mono"
+                            />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 absolute left-3 top-2.5 text-primary dark:text-red-400 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                        <p class="text-[0.6875rem] text-slate-500">فقط کافی است ویژگی <code class="font-mono bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">data-jdp</code> را به هر فیلدی اضافه کنید.</p>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">نحوه استفاده در کدهای شما</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- 1. اینکلود کردن استایل و اسکریپت جلالی --&gt;
+&lt;link rel="stylesheet" href="assets/css/jalali-datepicker.min.css" /&gt;
+&lt;script src="assets/js/libs/jalali-datepicker.min.js"&gt;&lt;/script&gt;
+
+&lt;!-- 2. اینپوت با اتریبیوت data-jdp --&gt;
+&lt;input type="text" data-jdp placeholder="انتخاب تاریخ خورشیدی..." /&gt;
+
+&lt;!-- 3. اجرای ناظر تاریخ در اسکریپت --&gt;
+&lt;script&gt;
+  jalaliDatepicker.startWatch({
+      minDate: "attr",
+      maxDate: "attr"
+  });
+&lt;/script&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 10: Form Validation -->
+            <section id="section-validation" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">اعتبارسنجی فرم</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">🛡️ اعتبارسنجی فرم‌ها با Just-Validate و پیام‌های فارسی</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">اعتبارسنجی فرم‌ها با استایل‌های منطبق بر تم رصد بدون وابستگی به جی‌کوئری</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <form id="docs-demo-form" class="max-w-md space-y-4" novalidate>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">ایمیل معتبر (الزامی):</label>
+                            <input type="email" id="docs-email-input" placeholder="example@domain.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-all" />
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-xs font-bold text-slate-700 dark:text-slate-300">رمز عبور (حداقل ۶ نویسه):</label>
+                            <input type="password" id="docs-pass-input" placeholder="••••••" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none transition-all" />
+                        </div>
+                        <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-900 text-white text-xs font-bold shadow-sm transition-colors">
+                            ارسال و تست اعتبارسنجی
+                        </button>
+                    </form>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">JavaScript Integration</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد JS</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>// نمونه اتصال JustValidate به فرم
+const validator = new JustValidate('#docs-demo-form', {
+    errorFieldCssClass: ['!border-rose-500', '!ring-rose-500/20'],
+    errorLabelCssClass: ['text-rose-500', 'text-[0.6875rem]', 'font-semibold', 'mt-1']
+});
+
+validator
+    .addField('#docs-email-input', [
+        { rule: 'required', errorMessage: 'وارد کردن آدرس ایمیل الزامی است.' },
+        { rule: 'email', errorMessage: 'فرمت آدرس ایمیل وارد شده نامعتبر است.' }
+    ])
+    .addField('#docs-pass-input', [
+        { rule: 'required', errorMessage: 'رمز عبور نمی‌تواند خالی باشد.' },
+        { rule: 'minLength', value: 6, errorMessage: 'رمز عبور حداقل باید ۶ کاراکتر باشد.' }
+    ])
+    .onSuccess((event) => {
+        event.preventDefault();
+        window.showToast('فرم با موفقیت اعتبارسنجی شد!', 'success');
+    });</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 11: Toast Notifications -->
+            <section id="section-toasts" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">سیستم پیام و فیدبک</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">🔔 سیستم اعلان و توست سراسری (showToast)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">تولید اعلان‌های انیمیشنی معلق با بستن خودکار و ذخیره هوشمند در صف اعلان‌ها</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="text-xs font-bold text-slate-400 mb-3">تست زنده ایجاد اعلان:</div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button type="button" onclick="testToast('عملیات با موفقیت انجام شد.', 'success')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors">
+                            اعلان موفقیت (Success)
+                        </button>
+                        <button type="button" onclick="testToast('خطایی در برقراری ارتباط با سرور رخ داد!', 'error')" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors">
+                            اعلان خطا (Error)
+                        </button>
+                        <button type="button" onclick="testToast('خبر جدیدی به بایگانی اضافه شد.', 'info')" class="px-4 py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold transition-colors">
+                            اعلان اطلاعاتی (Info)
+                        </button>
+                        <button type="button" onclick="testToast('لطفاً فیلدهای الزامی را بررسی فرمایید.', 'warning')" class="px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors">
+                            اعلان هشدار (Warning)
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">فراخوانی توست در جاوااسکریپت</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد JS</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>// فراخوانی مستقیم تابع سراسری showToast
+window.showToast('پیام مورد نظر شما برای کاربر', 'success'); // یا 'error', 'info', 'warning'</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 12: Skeleton Loaders -->
+            <section id="section-skeletons" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">وضعیت‌های بارگذاری</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">⏳ لودرهای اسکلتی (Skeleton Loaders)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">نمایش اسکلت اولیه محتوا با افکت پالس هنگام دریافت پاسخ از API یا فراخوانی‌های ایجکس</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 preview-box">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-3">
+                            <div class="aspect-video rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                            <div class="h-3 w-1/4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                            <div class="h-4 w-3/4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                            <div class="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                        </div>
+
+                        <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 space-y-4 flex flex-col justify-center">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-slate-200 dark:bg-slate-800 animate-pulse shrink-0"></div>
+                                <div class="space-y-2 flex-1">
+                                    <div class="h-3.5 w-1/3 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                                    <div class="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="h-3 w-full rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                                <div class="h-3 w-4/5 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative rounded-xl bg-slate-900 border border-slate-800 p-4 overflow-hidden">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-[0.6875rem] font-mono text-slate-400">HTML Snippet</span>
+                        <button type="button" onclick="copySnippet(this)" class="copy-btn inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 text-white text-[0.6875rem] font-mono transition-colors">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <span>کپی کد</span>
+                        </button>
+                    </div>
+                    <pre class="code-snippet text-xs text-slate-200 overflow-x-auto p-2"><code>&lt;!-- Skeleton Card with Pulse Effect --&gt;
+&lt;div class="rounded-2xl border border-slate-200 dark:border-slate-800 p-4 space-y-3"&gt;
+    &lt;div class="aspect-video rounded-xl bg-slate-200 dark:bg-slate-800 animate-pulse"&gt;&lt;/div&gt;
+    &lt;div class="h-4 w-3/4 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"&gt;&lt;/div&gt;
+    &lt;div class="h-3 w-1/2 rounded bg-slate-200 dark:bg-slate-800 animate-pulse"&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+                </div>
+            </section>
+
+            <!-- Section 13: Mega Menu -->
+            <section id="section-megamenu" class="component-card space-y-4">
+                <div class="border-b border-slate-200 dark:border-slate-800 pb-3">
+                    <span class="text-xs font-bold text-primary dark:text-red-400">ناوبری هوشمند</span>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white mt-0.5">🧭 معماری مگامنو (Mega Menu)</h2>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">توضیح خصوصیات داده‌ای (Data Attributes) مورد استفاده در ناوبری برای نمایش زیرمنوهای تمام‌عرض</p>
+                </div>
+
+                <div class="rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 space-y-4 text-xs text-slate-600 dark:text-slate-400 leading-7">
+                    <p>
+                        سیستم مگامنو در KhabarUI از طریق سه خصوصیت کلیدی کنترل می‌شود:
+                    </p>
+                    <ul class="list-disc list-inside space-y-1.5 font-mono text-[0.8125rem]">
+                        <li><strong class="text-primary dark:text-red-400">data-mega-item:</strong> بر روی المان والد تگ <code class="bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">&lt;li&gt;</code> در منو قرار می‌گیرد.</li>
+                        <li><strong class="text-primary dark:text-red-400">data-mega-trigger="key":</strong> بر روی لینک فعال‌کننده منو قرار می‌گیرد.</li>
+                        <li><strong class="text-primary dark:text-red-400">data-mega-panel="key":</strong> بر روی پنل بازشونده با همان کلید تعریف می‌شود.</li>
+                    </ul>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        ماژول <code class="font-mono text-primary dark:text-red-400">NewsComponents.initMegaMenu(navElement)</code> به طور خودکار رویدادهای ماوس (Hover)، تاخیر در بستن برای ارگونومی بهتر و کلید Escape را مدیریت می‌کند.
+                    </p>
+                </div>
+            </section>
+
+        </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
+            <div>
+                مستندات و کتابخانه کامپوننت‌های <strong>KhabarUI</strong> — توسعه داده شده توسط <a href="https://github.com/DevRepoNull" target="_blank" rel="noopener noreferrer" class="font-bold text-brand-red hover:underline">DevRepoNull</a>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="index.html" class="hover:text-primary dark:hover:text-red-400 transition-colors">پورتال اصلی</a>
+                <a href="frontend/index.html" class="hover:text-primary dark:hover:text-red-400 transition-colors">بخش نمایشی</a>
+                <a href="admin/admin-dashboard.html" class="hover:text-primary dark:hover:text-red-400 transition-colors">پنل ادمین</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="rasad-toast-container" class="rasad-toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- Scripts -->
+    <script src="assets/js/libs/jalali-datepicker.min.js"></script>
+    <script src="assets/js/libs/just-validate.min.js"></script>
+    <script src="assets/js/components.js"></script>
+    <script src="assets/js/main.js"></script>
+
+    <script>
+        // Copy snippet to clipboard with visual feedback
+        function copySnippet(buttonEl) {
+            const container = buttonEl.closest('.relative');
+            const codeEl = container ? container.querySelector('code') : null;
+            if (!codeEl) return;
+
+            const text = codeEl.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const spanEl = buttonEl.querySelector('span');
+                const originalText = spanEl ? spanEl.innerText : 'کپی کد';
+                if (spanEl) spanEl.innerText = 'کپی شد! ✓';
+                buttonEl.classList.add('!bg-emerald-700');
+                setTimeout(() => {
+                    if (spanEl) spanEl.innerText = originalText;
+                    buttonEl.classList.remove('!bg-emerald-700');
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+
+        // Toggle password demo
+        function togglePasswordVisibility(fieldId, btnEl) {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+            const isPassword = field.type === 'password';
+            field.type = isPassword ? 'text' : 'password';
+        }
+
+        // Trigger test toast
+        function testToast(message, type) {
+            if (typeof window.showToast === 'function') {
+                window.showToast(message, type);
+            } else {
+                alert(message);
+            }
+        }
+
+        // Initialize Live Demo Elements on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Init tabs demo
+            const tabsContainer = document.getElementById('demo-tabs-container');
+            if (tabsContainer && window.NewsComponents && typeof window.NewsComponents.initTabs === 'function') {
+                window.NewsComponents.initTabs(tabsContainer);
+            }
+
+            // 2. Init Jalali Datepicker watch
+            if (typeof jalaliDatepicker !== 'undefined' && jalaliDatepicker.startWatch) {
+                jalaliDatepicker.startWatch({
+                    minDate: "attr",
+                    maxDate: "attr"
+                });
+            }
+
+            // 3. Init JustValidate demo
+            const form = document.getElementById('docs-demo-form');
+            if (form && typeof JustValidate !== 'undefined') {
+                const validator = new JustValidate(form, {
+                    errorFieldCssClass: ['!border-rose-500', '!ring-rose-500/20'],
+                    errorLabelCssClass: ['text-rose-500', 'text-[0.6875rem]', 'font-semibold', 'mt-1']
+                });
+
+                validator
+                    .addField('#docs-email-input', [
+                        { rule: 'required', errorMessage: 'وارد کردن آدرس ایمیل الزامی است.' },
+                        { rule: 'email', errorMessage: 'فرمت آدرس ایمیل وارد شده نامعتبر است.' }
+                    ])
+                    .addField('#docs-pass-input', [
+                        { rule: 'required', errorMessage: 'رمز عبور نمی‌تواند خالی باشد.' },
+                        { rule: 'minLength', value: 6, errorMessage: 'رمز عبور حداقل باید ۶ کاراکتر باشد.' }
+                    ])
+                    .onSuccess((e) => {
+                        e.preventDefault();
+                        if (typeof window.showToast === 'function') {
+                            window.showToast('فرم با موفقیت تایید و اعتبارسنجی شد!', 'success');
+                        }
+                    });
+            }
+
+            // 4. Live component search filter
+            const searchInput = document.getElementById('component-search-input');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => {
+                    const query = e.target.value.toLowerCase().trim();
+                    const cards = document.querySelectorAll('.component-card');
+                    cards.forEach(card => {
+                        const text = card.textContent.toLowerCase();
+                        if (!query || text.includes(query)) {
+                            card.style.display = '';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
